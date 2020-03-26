@@ -14,6 +14,7 @@ using namespace std;
 
 bool isZero (int** i) { return i==0; }
 
+
 void count(int **p[]){
     vector<int**> ptrVec(p, p + MAX_SIZE_PTRARRAY);
     ptrVec.erase(remove_if(ptrVec.begin(), ptrVec.end(), isZero), ptrVec.end()); // Remove all zeros (all the spaces that are not being used and nullptr from previous array)
@@ -39,8 +40,8 @@ void count(int **p[]){
     for(int i = 0; i < countAddr.size(); i++){
         for(int j = i+1; j < countAddr.size(); j++){
             if (countAddr[i].second == countAddr[j].second){
-                countAddr[i].first++;
-                indexes2.push_back(j);
+                countAddr[i].first++; // increase counter
+                indexes2.push_back(j); // determine which pointers of the 2 lvl are pointing to the same lvl 3 integers
             }
         }
         counter.push_back(make_pair(countAddr[i].first,i));
@@ -50,23 +51,27 @@ void count(int **p[]){
         counter.erase(counter.begin() + indexes2[i]); // remove duplicates
         lvl3ints.erase(lvl3ints.begin() + indexes2[i]); // remove duplicates
     }
-    
-    // print the integers in increasing order of the numbers of the first level pointers that can reach them
+    // You must print the integers in increasing order of the numbers of the first level pointers that can reach them
     sort(counter.begin(), counter.end());
-    counter.push_back(make_pair(0,0)); // Append a 0,0 pair to avoid out of range problems
+    vector<pair<int, int>> result;// lvl3 integer value and its counter
     for (int i = 0; i < lvl3ints.size(); i++){
-        // If two integers have the same numbers of the first level pointers that can reach them, print the smaller integer first
-        if(counter[i].first == counter[i+1].first){
-            
-        }
-        // print the integers and the number of first level pointers that can reach them
-        cout << lvl3ints[counter[i].second] << " " << counter[i].first << endl;
+        result.push_back(make_pair(lvl3ints[counter[i].second], counter[i].first));
     }
-    
-    
-
-    cout << "Debug time";
-    
-    
+    //  If two integers have the same numbers of the first level pointers that can reach them, print the smaller integer first
+    int idx = 0;
+    while ((result[idx].second == result[idx+1].second) && (idx < lvl3ints.size()-1)){
+        if(result[idx].first > result[idx+1].first){
+            int temp = result[idx].first;
+            result[idx].first = result[idx+1].first;
+            result[idx+1].first = temp;
+            idx = 0;
+        }else{
+            idx++;
+        }
+    }
+    // Print the integers and the number of first level pointers that can reach them
+    for(int i = 0; i < result.size(); i++){
+        cout << result[i].first << " " << result[i].second << endl;
+    }
     
 }

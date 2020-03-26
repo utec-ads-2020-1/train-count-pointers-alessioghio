@@ -11,7 +11,7 @@ int main(){
     int  *intPtr[MAX_NUM_PTR];
     int   intVar[MAX_NUM_INTVAR];
 
-    int sampleInput = 1; // Change value depending on sample inputs
+    int sampleInput = 2; // Change value depending on sample inputs
 
     switch (sampleInput)
     {
